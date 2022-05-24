@@ -18,5 +18,6 @@ Ventajas.
 - Aplicaciones con menos personas 
 - 35% menos lineas de codigo, 40% menos archivos.
 - Tiempo de respuesta hasta un 35 % mas rapido. 
-
+- Todo es JS.
+- Amplio ecosistema openSource
 */
