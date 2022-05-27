@@ -14,3 +14,6 @@ console.log(__dirname);
 
 // FILE SISTEM...............................................
 // Modulo utilizado para el manejo de archivos
+
+// EVENTS
+// Acciones ante acciones determinadas
