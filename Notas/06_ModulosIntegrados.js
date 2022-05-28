@@ -17,3 +17,7 @@ console.log(__dirname);
 
 // EVENTS
 // Acciones ante acciones determinadas
+
+
+// Modulo HTTP 
+// Modulo para hacer consultas HTTP
