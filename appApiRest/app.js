@@ -33,6 +33,12 @@ app.get("/test/:id/:name", (req, res) => {
   res.send(req.params);
 });
 
+
+
+/*
+QUERY PARAMS
+- Estos parametros son consultados mediante ?nombre=daniel en la url
+*/
 app.get("/query", (req, res) => {
   res.send(req.query);
 });
