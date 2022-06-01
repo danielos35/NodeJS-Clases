@@ -54,3 +54,26 @@ CONFIGURACIÓN DE PUERTOS
 app.listen(port, () => {
   console.log(`servidor en ejecución en el puerto ${port}`);
 });
+
+
+// DATA
+const usuarios = [
+  {id:0, nombre:'Daniel1'},
+  {id:1, nombre:'Daniel2'},
+  {id:2, nombre:'Daniel3'},
+  {id:3, nombre:'Daniel4'}
+]
+
+
+// PETICIÓN GET 
+app.get('/consulta/:id',(req,res)=>{
+
+  // Los valores siempre vienen de tipo string, por tal deben de ser convertidos
+  let usuario = usuarios.find(res=>res.id===  +req.params.id)
+
+  // En caso de no existir el valor
+  if(!usuario)res.status(404).send('El usuario no fue encontrado')
+
+  // En caso de que si
+  res.send(usuario)
+})
