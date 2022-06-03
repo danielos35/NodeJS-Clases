@@ -18,12 +18,23 @@ ARGUMENTOS
  - (request, response)=>{}
 */
 
+
+
+
+// DATA
+const usuarios = [
+  {id:0, nombre:'Daniel1'},
+  {id:1, nombre:'Daniel2'},
+  {id:2, nombre:'Daniel3'},
+  {id:3, nombre:'Daniel4'}
+]
+
 app.get("/", (req, res) => {
   res.send("Hola Mundo desde Express");
 });
 
 app.get("/api/usuarios", (req, res) => {
-  res.send(["Daniel", "Felipe", "Sebastian", "Jose"]);
+  res.send(usuarios);
 });
 
 /*
@@ -50,16 +61,8 @@ const port = process.env.PORT || 3000;
 
 
 
-// DATA
-const usuarios = [
-  {id:0, nombre:'Daniel1'},
-  {id:1, nombre:'Daniel2'},
-  {id:2, nombre:'Daniel3'},
-  {id:3, nombre:'Daniel4'}
-]
 
-
-// PETICIÓN GET 
+// PETICIÓN GET..................................... 
 app.get('/consulta/:id',(req,res)=>{
 
   // Los valores siempre vienen de tipo string, por tal deben de ser convertidos
@@ -69,10 +72,10 @@ app.get('/consulta/:id',(req,res)=>{
   if(!usuario)res.status(404).send('El usuario no fue encontrado')
 
   // En caso de que si
-  res.send(usuario)
+  res.send(usuarios)
 })
 
-// POST 
+// POST ...................................................................
 app.use(express.json()); 
 
 app.post('/api/usuarios', (req,res)=>{
@@ -109,6 +112,43 @@ app.post('/api/usuarios', (req,res)=>{
   
 })
 
+// PUT.................................................................
+
+app.put('/api/usuarios/:id', (req,res)=>{
+
+    let usuario = usuarios.find(res=>res.id===  +req.params.id);
+    if(!usuario)res.status(404).send('El usuario no fue encontrado');
+
+    const schema = Joi.object({
+      nombre: Joi.string().min(3).max(30).required()})
+  
+    
+    const {error,value} = schema.validate({ nombre:req.body.nombre});
+  
+    if(error){
+      res.status(400).send(error); 
+      return
+    }
+
+    usuario.nombre = value.nombre;
+    res.send(usuario)
+
+})
+
+
+// DELETE........................................
+app.delete('/api/usuarios/:id',(req, res)=>{
+  let usuario = usuarios.find(res=>res.id===  +req.params.id);
+  if(!usuario)res.status(404).send('El usuario no fue encontrado');
+
+  const schema = Joi.object({
+    nombre: Joi.string().min(3).max(30).required()})
+
+  const index = usuarios.indexOf(usuario); 
+  usuarios.splice(index,1);
+  res.send(usuarios)
+
+})
 
 /*
 CONFIGURACIÓN DE PUERTOS
