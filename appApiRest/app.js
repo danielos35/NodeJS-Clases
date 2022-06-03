@@ -4,6 +4,8 @@ const express = require("express");
 // Crear instancia de express
 const app = express();
 
+// Traer JOI (VALIDADOR)
+const Joi = require('joi');
 /*
 METODOS.
 - app.get();     //Pedir datos
@@ -46,14 +48,6 @@ app.get("/query", (req, res) => {
 // VARIABLES DE ENTORNO
 const port = process.env.PORT || 3000;
 
-/*
-CONFIGURACIÓN DE PUERTOS
-- Puerto. 
-- Accion a realizar durante la ejecución.
-*/
-app.listen(port, () => {
-  console.log(`servidor en ejecución en el puerto ${port}`);
-});
 
 
 // DATA
@@ -77,3 +71,52 @@ app.get('/consulta/:id',(req,res)=>{
   // En caso de que si
   res.send(usuario)
 })
+
+// POST 
+app.use(express.json()); 
+
+app.post('/api/usuarios', (req,res)=>{
+  // // VAlidación simple
+  // if(!req.body.nombre){
+  //   // codigo 400 significa que no es un requerimiento valido.
+  //   res.status(400).send('Debe ingresar Datos validos')
+  //   return
+  // }
+
+  /*
+    VALIDACIÓN CON JOI
+    -Primero definimos las reglas de usuario.
+    -Despues Hacemos la validación.
+  */
+  const schema = Joi.object({
+    nombre: Joi.string().min(3).max(30).required()})
+
+  
+  const {error,value} = schema.validate({ nombre:req.body.nombre});
+
+  if(!error){
+    const usuario = {
+      id: usuarios.length + 1,
+      nombre: value.nombre,
+    }; 
+ 
+    usuarios.push(usuario)
+    res.send(usuario)
+    return
+  }
+
+  res.status(400).send(error)
+  
+})
+
+
+/*
+CONFIGURACIÓN DE PUERTOS
+- Puerto. 
+- Accion a realizar durante la ejecución.
+*/
+
+app.listen(port, () => {
+  console.log(`servidor en ejecución en el puerto ${port}`);
+});
+
