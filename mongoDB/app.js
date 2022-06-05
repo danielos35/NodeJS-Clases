@@ -18,11 +18,48 @@ const cursoSchema = new mongoose.Schema({
   publicado: Boolean,
 });
 
-// Creación de la clase.
-const Curso = mongoose.model("curso", cursoSchema);
-const curso = new Curso({
-  nombre: "JavaScript",
-  autor: "Daniel",
-  etiquetas: ["Desarrollo web", "forntEnd"],
-  publicado: true,
-});
+
+// GUARDADO DE INFORMACIÓN...................................................
+
+// Creación de la clase. (GUARDADO)
+
+const Curso = mongoose.model("Curso", cursoSchema);
+let crearCurso = async function () {
+  const curso = new Curso({
+    nombre: "Node",
+    autor: "Pepito Perez",
+    etiquetas: ["Desarrollo", "IA"],
+    publicado: true,
+  });
+
+  // Guardado de documentos
+  const respuesta = await curso.save();
+  console.log(respuesta);
+};
+
+crearCurso();
+
+
+// CONSULTA DE INFORMACIÓN
+
+let consultarCursos = async function(){
+    const cursos = await Curso
+    
+        // El metodo find nos permite consultar información
+        .find(
+        // Condicionar respuesta
+        {publicado:true})
+
+        // Numero de respuestas requeridas
+        .limit(2)
+
+        // Ordenar por el autor (ascendete 1, descendente -1)
+        .sort({autor:-1})
+
+        // Definir elementos a mostrar
+        .select({nombre:1, etiquetas:1})
+
+    console.log("consultas: "+ cursos);
+}
+
+consultarCursos()
