@@ -43,23 +43,43 @@ crearCurso();
 // CONSULTA DE INFORMACIÓN
 
 let consultarCursos = async function(){
-    const cursos = await Curso
-    
-        // El metodo find nos permite consultar información
-        .find(
-        // Condicionar respuesta
-        {publicado:true})
+  // Operadores de comparación:
 
-        // Numero de respuestas requeridas
-        .limit(2)
+  // eq  (igual)
+  // ne  (no igual)
+  // gt  (mayor que)
+  // gte (mayor o igual que)
+  // lt  (menor que)
+  // lte (menor o igual que)
+  // in  (valores dentro de un consulta)
+  // nin (not in, valores que no está en una consulta)
 
-        // Ordenar por el autor (ascendete 1, descendente -1)
-        .sort({autor:-1})
+  const cursos = await Curso
+    // eq
+    .find({ precio: 10 })
 
-        // Definir elementos a mostrar
-        .select({nombre:1, etiquetas:1})
+    // rango de precios gte y lte
+    .find({ precio: { $gte: 10, $lte: 30 } })
 
-    console.log("consultas: "+ cursos);
+    //Valores especificos
+    .find({ precio: { $in: [12, 15, 17] } })
+
+    // El metodo find nos permite consultar información
+    .find(
+      // Condicionar respuesta
+      { publicado: true }
+    )
+
+    // Numero de respuestas requeridas
+    .limit(2)
+
+    // Ordenar por el autor (ascendete 1, descendente -1)
+    .sort({ autor: -1 })
+
+    // Definir elementos a mostrar
+    .select({ nombre: 1, etiquetas: 1 });
+
+  console.log("consultas: " + cursos);
 }
 
 consultarCursos()
