@@ -82,6 +82,15 @@ let consultarCursos = async function(){
 
     // EXPRESIONES REGULARES
 
+    // Iniciar con las letras dan
+    .find({ autor: /^dan/ })
+
+    // termina con las letras dan
+    .find({ autor: /dan$/ })
+
+    // Cuando un campo tiene un contenido expesifico
+    .find({ autor: /.*ro.*./ })
+
     // Numero de respuestas requeridas
     .limit(2)
 
