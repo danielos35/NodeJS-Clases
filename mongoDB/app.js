@@ -53,6 +53,8 @@ let consultarCursos = async function(){
   // lte (menor o igual que)
   // in  (valores dentro de un consulta)
   // nin (not in, valores que no está en una consulta)
+  // or (uno o lo tro)
+  // and (uno y el otro)
 
   const cursos = await Curso
     // eq
@@ -69,6 +71,16 @@ let consultarCursos = async function(){
       // Condicionar respuesta
       { publicado: true }
     )
+
+    // or (se cumple una de las dos opciones)
+    .find()
+    .or({ autor: "Daniel" }, { publicado: true })
+
+    // and
+    .find()
+    .and({ autor: "Daniel" }, { publicado: true })
+
+    // EXPRESIONES REGULARES
 
     // Numero de respuestas requeridas
     .limit(2)
