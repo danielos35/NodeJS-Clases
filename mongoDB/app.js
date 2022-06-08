@@ -42,7 +42,7 @@ crearCurso();
 
 // CONSULTA DE INFORMACIÓN
 
-let consultarCursos = async function(){
+let consultarCursos = async function () {
   // Operadores de comparación:
 
   // eq  (igual)
@@ -56,7 +56,12 @@ let consultarCursos = async function(){
   // or (uno o lo tro)
   // and (uno y el otro)
 
-  const cursos = await Curso
+  //PAGINAR RESULTADOS (mostrar una pequeña cantidad de datos de la consulta ).......
+  const numeroPaginas = 2;
+  const sizePage = 10;
+
+  const cursos = await Curso.skip((numeroPaginas - 1) * sizePage)
+    .limit(sizePage)
     // eq
     .find({ precio: 10 })
 
@@ -80,7 +85,7 @@ let consultarCursos = async function(){
     .find()
     .and({ autor: "Daniel" }, { publicado: true })
 
-    // EXPRESIONES REGULARES
+    // EXPRESIONES REGULARES......................................................
 
     // Iniciar con las letras dan
     .find({ autor: /^dan/ })
@@ -101,6 +106,44 @@ let consultarCursos = async function(){
     .select({ nombre: 1, etiquetas: 1 });
 
   console.log("consultas: " + cursos);
-}
+};
 
-consultarCursos()
+// consultarCursos()
+
+// ACTUALIZAR DATOS DEL DOCUMENTO
+const actualizarDocumento = async function (id) {
+  // FORMA 1
+  //   const curso = await Curso.findById(id);
+  //   if (!curso) {
+  //     console.log("El curso no existe");
+  //   }
+
+  //   // Opción Uno
+  //   curso.publicado = false;
+  //   curso.autor = "Felipe Alexandro";
+
+  //   // Opción Dos
+  //   // curso.set({
+  //   //   publicado: true,
+  //   //   autor: "Pepito Lopez",
+  //   // });
+
+  //   const resultado = await curso.save();
+  //   console.log(resultado);
+  //
+
+  // FORMA 2
+  const resultado = await Curso.update(
+    { _id: id },
+    {
+      $set: {
+        autor: "Maria",
+        publicado: false,
+      },
+    }
+  );
+
+  console.log(resultado);
+};
+
+actualizarDocumento("629d213b3a2db361e5c434fe");
