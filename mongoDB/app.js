@@ -144,6 +144,26 @@ const actualizarDocumento = async function (id) {
   );
 
   console.log(resultado);
+
+  // Retorna el documento antes y lo actualza
+  const resultadoDos = await Curso.findByIdAndUpdate(id, {
+    $set: {
+      autor: "Luis",
+      publicado: false,
+    },
+  });
+
+  // Retorna el documento ya actualizado
+  const resultadoTres = await Curso.findByIdAndUpdate(
+    id,
+    {
+      $set: {
+        autor: "Luis",
+        publicado: false,
+      },
+    },
+    { new: true }
+  );
 };
 
 actualizarDocumento("629d213b3a2db361e5c434fe");
