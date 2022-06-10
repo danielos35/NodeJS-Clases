@@ -1,8 +1,18 @@
-/*
-MODELS.
+const express = require("express");
+const mongoose = require("mongoose");
 
--Se utiliza para el guardado de los modelos de Mongo DB
+// Conectarnos a base de datos
 
-ROUTES
-- Rutas
-*/
+const app = express();
+
+const port = process.env.PORT || 3000;
+app.listen(port, () => {
+  console.log("API WORK");
+});
+
+mongoose
+  .connect("mongodb://localhost/demo")
+  .then(() => {
+    console.log("conectado a mongo");
+  })
+  .catch((err) => console.log(`No se pudo conectar por un error ${err}`));
