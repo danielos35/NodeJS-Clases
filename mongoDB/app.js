@@ -167,3 +167,10 @@ const actualizarDocumento = async function (id) {
 };
 
 actualizarDocumento("629d213b3a2db361e5c434fe");
+
+// Eliminar Doicumento
+// los datos no se suelen eliminar, sino cambiar el estado de estos mismos
+const eliminarDocumento = function(){
+  const result = await Curso.deleteOne({_id:id})
+  console.log(result);
+}
