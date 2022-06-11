@@ -11,7 +11,9 @@ app.listen(port, () => {
 });
 
 mongoose
-  .connect("mongodb://localhost/demo")
+  .connect(
+    "mongodb+srv://danielmarquez:123@danielmarquez.93xkp.mongodb.net/danielmarquez?retryWrites=true&w=majority"
+  )
   .then(() => {
     console.log("conectado a mongo");
   })
