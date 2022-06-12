@@ -1,5 +1,18 @@
 const express = require("express");
 const Usuario = require("../models/usuario_model");
+const Joi = require("joi");
+
+const schema = Joi.object({
+  nombre: Joi.string().min(3).max(10).required(),
+
+  password: Joi.string().pattern(new RegExp("^[a-zA-Z0-9]{3,30}$")),
+
+  email: Joi.string().email({
+    minDomainSegments: 2,
+    tlds: { allow: ["com", "net"] },
+  }),
+});
+
 const ruta = express.Router();
 ruta.get("/", (req, res) => {
   let resultado = verUsuarios();
@@ -16,19 +29,29 @@ ruta.get("/", (req, res) => {
 
 ruta.post("/", (req, res) => {
   let body = req.body;
-  let resultado = crearUsuario(body);
+  const { error, value } = schema.validate({
+    nombre: body.nombre,
+    email: body.email,
+  });
+  if (!error) {
+    let resultado = crearUsuario(body);
 
-  resultado
-    .then((valor) => {
-      res.json({
-        valor: valor,
+    resultado
+      .then((valor) => {
+        res.json({
+          valor: valor,
+        });
+      })
+      .catch((err) => {
+        res.status(400).json({
+          error: err,
+        });
       });
-    })
-    .catch((err) => {
-      res.status(400).json({
-        error: err,
-      });
+  } else {
+    res.status(400).json({
+      error: error,
     });
+  }
 });
 
 // POST (Crear nuevos usuarios)
@@ -50,18 +73,25 @@ let verUsuarios = async function () {
 
 // PUT (actualizar)
 ruta.put("/:email", (req, res) => {
-  let resultado = actualizarUsuarios(req.params.email, req.body);
-  resultado
-    .then((valor) => {
-      res.json({
-        valor: valor,
+  const { error, value } = schema.validate({
+    nombre: req.body.nombre,
+  });
+  if (!error) {
+    let resultado = actualizarUsuarios(req.params.email, req.body);
+    resultado
+      .then((valor) => {
+        res.json({
+          valor: valor,
+        });
+      })
+      .catch((err) => {
+        res.status(400).json({
+          error: err,
+        });
       });
-    })
-    .catch((err) => {
-      res.status(400).json({
-        error: err,
-      });
-    });
+  } else {
+    res.status(400).json(error);
+  }
 });
 
 let actualizarUsuarios = async function (email, body) {
