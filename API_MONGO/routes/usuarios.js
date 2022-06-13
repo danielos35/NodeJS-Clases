@@ -29,6 +29,16 @@ ruta.get("/", (req, res) => {
 
 ruta.post("/", (req, res) => {
   let body = req.body;
+
+  Usuario.findOne({ email: body.email }, (err, user) => {
+    if (err) {
+      res.status(400).json({ error: "Server Error" });
+    }
+
+    if (user) {
+      return res.status(400).json({ mensaje: "El usuario ya existe." });
+    }
+  });
   const { error, value } = schema.validate({
     nombre: body.nombre,
     email: body.email,
@@ -39,7 +49,8 @@ ruta.post("/", (req, res) => {
     resultado
       .then((valor) => {
         res.json({
-          valor: valor,
+          nombre: valor.nombre,
+          email: valor.email,
         });
       })
       .catch((err) => {
@@ -67,7 +78,10 @@ let crearUsuario = async function (body) {
 
 // GET
 let verUsuarios = async function () {
-  let usuarios = await Usuario.find({ estado: true });
+  let usuarios = await Usuario.find({ estado: true }).select({
+    nombre: 1,
+    email: 1,
+  });
   return usuarios;
 };
 
@@ -81,7 +95,8 @@ ruta.put("/:email", (req, res) => {
     resultado
       .then((valor) => {
         res.json({
-          valor: valor,
+          nombre: valor.nombre,
+          email: valor.email,
         });
       })
       .catch((err) => {
@@ -115,7 +130,8 @@ ruta.delete("/:email", (req, res) => {
   resultado
     .then((valor) => {
       res.json({
-        usuario: valor,
+        nombre: valor.nombre,
+        email: valor.email,
       });
     })
     .catch((err) => {
