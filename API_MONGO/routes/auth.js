@@ -1,4 +1,5 @@
 const express = require("express");
+const jwt = require("jsonwebtoken");
 const Usuario = require("../models/usuario_model");
 const bcrypt = require("bcrypt");
 const ruta = express.Router();
@@ -17,7 +18,22 @@ ruta.post("/", (req, res) => {
             error: "Ok.",
             msj: "mensaje o contraseña incorrecta.",
           });
-        res.json(datos);
+        const jwtoken = jwt.sign(
+          {
+            exp: Math.floor(Date.now() / 1000) + 60 * 60,
+            data: { _id: datos._id, nombre: datos.nombre, email: datos.email },
+          },
+          "secret"
+        );
+        // jwt.sign({ _id: datos._id, nombre: datos.nombre, email: datos.email },"pass");
+        res.json({
+          usuario: {
+            _id: datos._id,
+            nombre: datos.nombre,
+            email: datos.email,
+          },
+          jwtoken,
+        });
       } else {
         res.status(400).json({
           error: "Ok.",
